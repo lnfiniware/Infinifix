@@ -12,7 +12,6 @@ from .distro import DistroInfo
 from .privacy import sanitize_obj
 from .runner import CommandRunner
 
-
 REPORT_ROOT = Path("/var/log/infinifix/reports")
 
 
@@ -69,7 +68,11 @@ def generate_report(
         "pactl_info.json": ["bash", "-lc", "pactl info"],
         "pactl_sinks.json": ["bash", "-lc", "pactl list short sinks"],
         "fwupdmgr_devices.json": ["bash", "-lc", "fwupdmgr get-devices"],
-        "journal_audio.json": ["bash", "-lc", "journalctl -b --no-pager | grep -Ei 'sof|pipewire|wireplumber|huawei-wmi'"],
+        "journal_audio.json": [
+            "bash",
+            "-lc",
+            "journalctl -b --no-pager | grep -Ei 'sof|pipewire|wireplumber|huawei-wmi'",
+        ],
     }
     for file_name, command in commands.items():
         _write_command_output(runner, command_dir / file_name, command)

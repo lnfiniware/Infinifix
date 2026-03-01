@@ -4,7 +4,6 @@ import os
 import re
 from typing import Any
 
-
 _EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 _HOME_PATTERN = re.compile(r"/home/[^/\s]+")
 _USERS_PATTERN = re.compile(r"/Users/[^/\s]+")
@@ -33,4 +32,3 @@ def sanitize_obj(obj: Any) -> Any:
     if isinstance(obj, dict):
         return {str(key): sanitize_obj(value) for key, value in obj.items()}
     return obj
-

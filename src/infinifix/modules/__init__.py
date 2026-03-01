@@ -1,2 +1,1 @@
 """Fix modules for InfiniFix."""
-

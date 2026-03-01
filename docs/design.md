@@ -1,7 +1,7 @@
 # Design Notes
 
 Repository: `https://github.com/lnfiniware/Infinifix`
-Release line: `v0.2 (beta)`
+Release line: `v0.3 (beta)`
 
 ## CLI Direction
 
@@ -31,6 +31,7 @@ Examples:
 - Support automation with `--yes` flags.
 - Prevent concurrent runs with execution locking.
 - Sanitize report payloads before writing archive files.
+- Keep bootloader/kernel cmdline edits in advanced mode only.
 
 ## Why Rich
 

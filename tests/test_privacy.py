@@ -16,4 +16,3 @@ def test_sanitize_obj_nested() -> None:
     redacted = sanitize_obj(payload)
     assert redacted["k"][0] == "<redacted-email>"
     assert redacted["k"][1]["p"] == "/Users/<user>/work"
-

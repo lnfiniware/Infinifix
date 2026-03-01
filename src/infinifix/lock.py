@@ -38,4 +38,3 @@ def _lock_path(name: str) -> Path:
         fallback = Path(tempfile.gettempdir()) / "infinifix" / name
         fallback.parent.mkdir(parents=True, exist_ok=True)
         return fallback
-

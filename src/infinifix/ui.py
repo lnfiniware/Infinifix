@@ -73,4 +73,3 @@ def results_table(console: Console, title: str, rows: Iterable[Mapping[str, obje
 
 def line(console: Console, message: str, style: str = "ok") -> None:
     console.print(message, style=style)
-

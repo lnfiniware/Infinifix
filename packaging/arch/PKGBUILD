@@ -1,5 +1,5 @@
 pkgname=infinifix
-pkgver=0.2.0b1
+pkgver=0.3.0b1
 pkgrel=1
 pkgdesc="InfiniFix - Huawei Linux Doctor"
 arch=('x86_64')

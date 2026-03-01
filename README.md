@@ -3,7 +3,7 @@
 **Huawei Linux Doctor**
 
 Repository: `https://github.com/lnfiniware/Infinifix`
-Release: `v0.2 (beta)`
+Release: `v0.3 (beta)`
 
 InfiniFix is a terminal-first doctor for Huawei and Honor laptops on Linux.
 It detects common breakages, builds a safe fix plan, and applies fixes with backups and verification.
@@ -18,6 +18,12 @@ The default flow is safe:
 
 Final message after apply:
 `All done. One step left: reboot now or later.`
+
+Advanced-only actions (`--all`):
+
+- firmware flashing (`fwupdmgr update`)
+- Huawei-WMI DKMS installation
+- bootloader/kernel cmdline edits
 
 ## What It Fixes
 
@@ -67,12 +73,13 @@ Dry-run works globally:
 infinifix --dry-run apply
 ```
 
-v0.2 beta highlights:
+v0.3 beta highlights:
 
 - `doctor --all --yes` automation path
 - `apply --all --yes` non-interactive advanced mode
 - execution lock to prevent overlapping runs
 - report sanitization for safer sharing
+- safer audio defaults: GRUB DSP kernel parameter moved to advanced mode
 
 Desktop launcher (optional, terminal app):
 

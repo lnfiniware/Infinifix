@@ -44,4 +44,3 @@ PRETTY_NAME="Arch Linux"
     )
     assert initramfs_command(distro) == ["mkinitcpio", "-P"]
     assert grub_regen_command(distro) == ["grub-mkconfig", "-o", "/boot/grub/grub.cfg"]
-

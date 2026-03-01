@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "infinifix"
-version = "0.2.0b1"
+version = "0.3.0b1"
 description = "InfiniFix - Huawei Linux Doctor"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -32,3 +32,10 @@ infinifix = [
   "data/rules/wireplumber/*.conf",
   "data/rules/ucm2_overrides/*",
 ]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

@@ -132,11 +132,13 @@ def filter_actions(actions: List[Dict[str, Any]], include_advanced: bool) -> Lis
     return selected
 
 
-def build_summary(ctx: DoctorContext, plans: Dict[str, Dict[str, Any]], selected_actions: List[Dict[str, Any]]) -> Dict[str, str]:
-    sanity = plans["sanity_checks"]["detect"]
-    firmware = plans["firmware_fwupd"]["detect"]
-    pipewire = plans["pipewire_wireplumber"]["detect"]
-    wmi = plans["huawei_wmi"]["detect"]
+def build_summary(
+    ctx: DoctorContext, plans: Dict[str, Dict[str, Any]], selected_actions: List[Dict[str, Any]]
+) -> Dict[str, str]:
+    sanity = plans.get("sanity_checks", {}).get("detect", {})
+    firmware = plans.get("firmware_fwupd", {}).get("detect", {})
+    pipewire = plans.get("pipewire_wireplumber", {}).get("detect", {})
+    wmi = plans.get("huawei_wmi", {}).get("detect", {})
 
     model = " ".join(
         [
@@ -155,9 +157,7 @@ def build_summary(ctx: DoctorContext, plans: Dict[str, Dict[str, Any]], selected
         if pipewire.get("pipewire_installed") and pipewire.get("wireplumber_installed")
         else "missing pieces",
         "WMI support status": "present" if wmi.get("wmi_present") else "missing",
-        "Firmware updates": "available"
-        if firmware.get("updates_available")
-        else "none-or-unknown",
+        "Firmware updates": "available" if firmware.get("updates_available") else "none-or-unknown",
         "Actions planned": str(len(selected_actions)),
     }
 
@@ -193,7 +193,9 @@ def apply_selected_actions(
     apply_results: List[Dict[str, Any]] = []
     verify_results: List[Dict[str, Any]] = []
     for module_name in MODULE_ORDER:
-        module_data = plans[module_name]
+        module_data = plans.get(module_name)
+        if not module_data:
+            continue
         module = module_data["module"]
         actions = filter_actions(module_data["actions"], include_advanced=include_advanced)
         if not actions:
@@ -203,7 +205,9 @@ def apply_selected_actions(
             apply_results.append(row)
 
     for module_name in MODULE_ORDER:
-        module_data = plans[module_name]
+        module_data = plans.get(module_name)
+        if not module_data:
+            continue
         module = module_data["module"]
         verify = module.verify(ctx, module_data["detect"])
         verify_results.append(

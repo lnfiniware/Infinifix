@@ -5,12 +5,14 @@ from typing import Any, Dict, List
 
 from infinifix.distro import install_packages_command, resolve_package
 
-
 UDEV_RULES = Path("/etc/udev/rules.d/99-infinifix-huawei.rules")
 THRESHOLD_CONF = Path("/etc/infinifix/thresholds.conf")
 THRESHOLD_SERVICE = Path("/etc/systemd/system/infinifix-thresholds.service")
 THRESHOLD_SCRIPT = Path("/usr/libexec/infinifix/restore-thresholds.sh")
 SLEEP_HOOK = Path("/usr/lib/systemd/system-sleep/infinifix-thresholds")
+HUAWEI_WMI_DKMS_REPO = "https://github.com/qu1x/huawei-wmi.git"
+HUAWEI_WMI_DKMS_TAG = "v1.2.0"
+HUAWEI_WMI_DKMS_COMMIT = "cf0c41ed620e172f4de5fc5246d9d3fd55b04919"
 
 
 def _is_huawei_like(vendor: str, product: str) -> bool:
@@ -82,7 +84,7 @@ def plan(ctx, detected: Dict[str, Any]) -> List[Dict[str, Any]]:
         )
 
     if not detected.get("wmi_present"):
-        msg = "install Huawei-WMI DKMS module from GitHub"
+        msg = f"install Huawei-WMI DKMS module ({HUAWEI_WMI_DKMS_TAG})"
         if ctx.runtime.get("secure_boot"):
             msg += " (may fail with Secure Boot enabled)"
         actions.append(
@@ -182,15 +184,19 @@ def apply(ctx, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             install_cmd = (
                 "set -euo pipefail; "
                 "tmp=$(mktemp -d); "
-                "git clone --depth=1 https://github.com/qu1x/huawei-wmi.git \"$tmp\"; "
-                "cd \"$tmp\"; "
+                f'git clone --depth=1 --branch {HUAWEI_WMI_DKMS_TAG} {HUAWEI_WMI_DKMS_REPO} "$tmp"; '
+                'cd "$tmp"; '
+                "got=$(git rev-parse HEAD); "
+                f"expected={HUAWEI_WMI_DKMS_COMMIT}; "
+                'if [ "$got" != "$expected" ]; then '
+                'echo "Pinned commit mismatch: got=$got expected=$expected" >&2; exit 1; fi; '
                 "if [ -x ./install.sh ]; then ./install.sh; "
                 "elif [ -f dkms.conf ]; then "
                 "name=$(grep -E '^PACKAGE_NAME=' dkms.conf | cut -d= -f2 | tr -d '\"'); "
                 "ver=$(grep -E '^PACKAGE_VERSION=' dkms.conf | cut -d= -f2 | tr -d '\"'); "
                 "dkms add . || true; "
-                "dkms build \"$name/$ver\"; "
-                "dkms install \"$name/$ver\"; "
+                'dkms build "$name/$ver"; '
+                'dkms install "$name/$ver"; '
                 "else make && make install; fi"
             )
             result = ctx.runner.run(["bash", "-lc", install_cmd])
@@ -198,7 +204,11 @@ def apply(ctx, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 {
                     "id": action["id"],
                     "status": "ok" if result.returncode == 0 else "warn",
-                    "message": "DKMS install attempted" if result.returncode == 0 else result.stderr.strip()[:160],
+                    "message": (
+                        f"DKMS install attempted ({HUAWEI_WMI_DKMS_TAG}, {HUAWEI_WMI_DKMS_COMMIT[:12]})"
+                        if result.returncode == 0
+                        else result.stderr.strip()[:160]
+                    ),
                 }
             )
     return rows
@@ -219,8 +229,7 @@ def verify(ctx, detected: Dict[str, Any]) -> Dict[str, Any]:
         "ok": ok,
         "message": "Huawei WMI paths look sane"
         if ok
-        else "Huawei WMI features partially unavailable"
-        + (f" ({'; '.join(detail)})" if detail else ""),
+        else "Huawei WMI features partially unavailable" + (f" ({'; '.join(detail)})" if detail else ""),
     }
 
 

@@ -111,4 +111,3 @@ class BackupManager:
                     original.unlink(missing_ok=True)
                 restored.append(str(original))
         return restored
-

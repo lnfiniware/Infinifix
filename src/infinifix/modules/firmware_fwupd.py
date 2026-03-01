@@ -110,4 +110,3 @@ def verify(ctx, detected: Dict[str, Any]) -> Dict[str, Any]:
 
 def rollback(ctx, session) -> List[Dict[str, Any]]:
     return []
-

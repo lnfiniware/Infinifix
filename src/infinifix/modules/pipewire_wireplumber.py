@@ -6,7 +6,6 @@ from typing import Any, Dict, List
 from infinifix.distro import install_packages_command, package_installed_command, resolve_package
 from infinifix.paths import wireplumber_template_candidates
 
-
 DROPIN_TARGET = Path("/etc/wireplumber/wireplumber.conf.d/51-infinifix.conf")
 
 
@@ -72,13 +71,21 @@ def plan(ctx, detected: Dict[str, Any]) -> List[Dict[str, Any]]:
             }
         )
 
-    if (not detected.get("sinks_found") or not detected.get("sources_found")) and not detected.get("dropin_exists"):
+    missing_nodes = not detected.get("sinks_found") or not detected.get("sources_found")
+    services_active = all(
+        [
+            detected.get("pipewire_active"),
+            detected.get("wireplumber_active"),
+            detected.get("pipewire_pulse_active"),
+        ]
+    )
+    if missing_nodes and services_active and not detected.get("dropin_exists"):
         actions.append(
             {
                 "id": "add_wireplumber_dropin",
-                "description": "add minimal WirePlumber drop-in",
-                "safe": True,
-                "advanced": False,
+                "description": "advanced: add WirePlumber drop-in (can increase power usage)",
+                "safe": False,
+                "advanced": True,
             }
         )
 
@@ -139,6 +146,7 @@ def apply(ctx, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 def verify(ctx, detected: Dict[str, Any]) -> Dict[str, Any]:
     pactl = ctx.runner.run(["bash", "-lc", "pactl info"])
     sinks = ctx.runner.run(["bash", "-lc", "pactl list short sinks"])
+    sources = ctx.runner.run(["bash", "-lc", "pactl list short sources"])
     services_ok = all(
         [
             _user_service_active(ctx, "pipewire"),
@@ -146,8 +154,23 @@ def verify(ctx, detected: Dict[str, Any]) -> Dict[str, Any]:
             _user_service_active(ctx, "pipewire-pulse"),
         ]
     )
-    ok = pactl.returncode == 0 and bool(sinks.stdout.strip()) and services_ok
-    return {"ok": ok, "message": "PipeWire stack healthy" if ok else "PipeWire stack still incomplete"}
+    sink_count = len([line for line in sinks.stdout.splitlines() if line.strip()])
+    source_count = len([line for line in sources.stdout.splitlines() if line.strip()])
+    service_detail = (
+        f"pipewire={_user_service_active(ctx, 'pipewire')}, "
+        f"wireplumber={_user_service_active(ctx, 'wireplumber')}, "
+        f"pipewire-pulse={_user_service_active(ctx, 'pipewire-pulse')}"
+    )
+    ok = pactl.returncode == 0 and sink_count > 0 and source_count > 0 and services_ok
+    return {
+        "ok": ok,
+        "message": (
+            f"PipeWire stack healthy (sinks={sink_count}, sources={source_count}; {service_detail})"
+            if ok
+            else f"PipeWire stack incomplete (sinks={sink_count}, sources={source_count}; {service_detail}). "
+            "Run `infinifix report` and attach the tarball."
+        ),
+    }
 
 
 def rollback(ctx, session) -> List[Dict[str, Any]]:

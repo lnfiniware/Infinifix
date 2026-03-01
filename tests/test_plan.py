@@ -1,5 +1,5 @@
-from infinifix.doctor import filter_actions
 from infinifix.distro import detect_distro
+from infinifix.doctor import filter_actions
 from infinifix.modules import audio_sof, huawei_wmi
 
 
@@ -16,6 +16,7 @@ class DummyRunner:
 class DummyCtx:
     def __init__(self) -> None:
         self.runtime = {}
+        self.include_advanced = False
         self.distro = detect_distro('ID=ubuntu\nID_LIKE="debian"\nPRETTY_NAME="Ubuntu"\n')
         self.runner = DummyRunner()
         self.probe = {
@@ -33,13 +34,35 @@ def test_audio_plan_sets_boot_refresh() -> None:
         "aplay_has_devices": False,
         "sof_firmware_package": "sof-firmware",
         "sof_firmware_installed": False,
+        "dspcfg_in_sysfs": False,
+        "dspcfg_loaded": True,
+        "dsp_conf_present": False,
         "grub_param_present": False,
     }
     actions = audio_sof.plan(ctx, detected)
     ids = {row["id"] for row in actions}
     assert "set_dsp_driver_3" in ids
-    assert "add_grub_dsp_param" in ids
+    assert "add_grub_dsp_param" not in ids
     assert ctx.runtime["needs_boot_refresh"] is True
+
+
+def test_audio_grub_param_is_advanced_only() -> None:
+    ctx = DummyCtx()
+    ctx.include_advanced = True
+    detected = {
+        "intel_audio": True,
+        "dummy_output": True,
+        "aplay_has_devices": False,
+        "sof_firmware_package": "sof-firmware",
+        "sof_firmware_installed": True,
+        "dspcfg_in_sysfs": True,
+        "dspcfg_loaded": False,
+        "dsp_conf_present": True,
+        "grub_param_present": False,
+    }
+    actions = audio_sof.plan(ctx, detected)
+    add_grub = [row for row in actions if row["id"] == "add_grub_dsp_param"][0]
+    assert add_grub["advanced"] is True
 
 
 def test_huawei_wmi_advanced_action() -> None:
@@ -66,4 +89,3 @@ def test_filter_actions_modes() -> None:
     assert [row["id"] for row in safe_only] == ["safe_1"]
     full = filter_actions(actions, include_advanced=True)
     assert {row["id"] for row in full} == {"safe_1", "adv_1"}
-

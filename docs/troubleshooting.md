@@ -33,6 +33,12 @@ systemctl --user status pipewire wireplumber
 infinifix report
 ```
 
+If safe mode is still broken, advanced path is available:
+
+```bash
+sudo infinifix apply --all --yes
+```
+
 ## DKMS Install Fails
 
 Common reasons:
