@@ -133,6 +133,7 @@ def filter_actions(actions: List[Dict[str, Any]], include_advanced: bool) -> Lis
 
 
 def build_summary(ctx: DoctorContext, plans: Dict[str, Dict[str, Any]], selected_actions: List[Dict[str, Any]]) -> Dict[str, str]:
+    sanity = plans["sanity_checks"]["detect"]
     firmware = plans["firmware_fwupd"]["detect"]
     pipewire = plans["pipewire_wireplumber"]["detect"]
     wmi = plans["huawei_wmi"]["detect"]
@@ -149,6 +150,7 @@ def build_summary(ctx: DoctorContext, plans: Dict[str, Dict[str, Any]], selected
         "Detected distro / pkg manager": f"{ctx.distro.family} / {ctx.distro.package_manager}",
         "Huawei model (DMI)": model,
         "Kernel version": str(ctx.probe.get("kernel", platform.release())),
+        "Secure Boot": "enabled" if sanity.get("secure_boot_enabled") else "disabled-or-unknown",
         "Audio stack": "PipeWire+WirePlumber"
         if pipewire.get("pipewire_installed") and pipewire.get("wireplumber_installed")
         else "missing pieces",

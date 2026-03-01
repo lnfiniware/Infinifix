@@ -4,7 +4,7 @@ Repository: `https://github.com/lnfiniware/Infinifix`
 
 ## Supported Versions
 
-Current release line: `v0.1 (beta)`.
+Current release line: `v0.2 (beta)`.
 Security fixes land on `main`.
 
 ## Reporting a Vulnerability

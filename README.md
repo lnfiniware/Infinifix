@@ -3,7 +3,7 @@
 **Huawei Linux Doctor**
 
 Repository: `https://github.com/lnfiniware/Infinifix`
-Release: `v0.1 (beta)`
+Release: `v0.2 (beta)`
 
 InfiniFix is a terminal-first doctor for Huawei and Honor laptops on Linux.
 It detects common breakages, builds a safe fix plan, and applies fixes with backups and verification.
@@ -53,9 +53,10 @@ Run commands:
 
 ```bash
 infinifix doctor
+infinifix doctor --all --yes
 infinifix report
 sudo infinifix apply
-sudo infinifix apply --all
+sudo infinifix apply --all --yes
 sudo infinifix revert
 infinifix status
 ```
@@ -65,6 +66,13 @@ Dry-run works globally:
 ```bash
 infinifix --dry-run apply
 ```
+
+v0.2 beta highlights:
+
+- `doctor --all --yes` automation path
+- `apply --all --yes` non-interactive advanced mode
+- execution lock to prevent overlapping runs
+- report sanitization for safer sharing
 
 Desktop launcher (optional, terminal app):
 
@@ -127,3 +135,7 @@ See [SECURITY.md](SECURITY.md).
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).

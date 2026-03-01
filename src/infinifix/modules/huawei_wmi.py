@@ -31,6 +31,16 @@ def detect(ctx) -> Dict[str, Any]:
     vendor = str(ctx.probe.get("dmi_vendor", "")).strip()
     product = str(ctx.probe.get("dmi_product_name", "")).strip()
     thresholds = _threshold_paths()
+    fn_lock = Path("/sys/devices/platform/huawei-wmi/fn_lock_state")
+    fn_lock_path = str(fn_lock) if fn_lock.exists() else ""
+    fn_lock_readable = False
+    if fn_lock.exists():
+        try:
+            fn_lock.read_text(encoding="utf-8")
+            fn_lock_readable = True
+        except OSError:
+            fn_lock_readable = False
+
     mic_led = []
     leds_root = Path("/sys/class/leds")
     if leds_root.exists():
@@ -42,9 +52,8 @@ def detect(ctx) -> Dict[str, Any]:
         "is_huawei": _is_huawei_like(vendor, product),
         "wmi_present": Path("/sys/devices/platform/huawei-wmi").exists(),
         "threshold_paths": [str(path) for path in thresholds],
-        "fn_lock_path": str(Path("/sys/devices/platform/huawei-wmi/fn_lock_state"))
-        if Path("/sys/devices/platform/huawei-wmi/fn_lock_state").exists()
-        else "",
+        "fn_lock_path": fn_lock_path,
+        "fn_lock_readable": fn_lock_readable,
         "micmute_led_paths": mic_led,
     }
 
@@ -199,10 +208,19 @@ def verify(ctx, detected: Dict[str, Any]) -> Dict[str, Any]:
     threshold_paths = _threshold_paths()
     threshold_ok = all(path.exists() for path in threshold_paths) if threshold_paths else True
     wmi_ok = Path("/sys/devices/platform/huawei-wmi").exists() or not detected.get("is_huawei")
-    ok = threshold_ok and wmi_ok
+    fn_ok = bool(detected.get("fn_lock_readable", True)) or not bool(detected.get("fn_lock_path", ""))
+    ok = threshold_ok and wmi_ok and fn_ok
+    detail = []
+    if detected.get("fn_lock_path"):
+        detail.append("fn-lock readable" if fn_ok else "fn-lock path unreadable")
+    if detected.get("micmute_led_paths"):
+        detail.append("micmute LED path present")
     return {
         "ok": ok,
-        "message": "Huawei WMI paths look sane" if ok else "Huawei WMI features partially unavailable",
+        "message": "Huawei WMI paths look sane"
+        if ok
+        else "Huawei WMI features partially unavailable"
+        + (f" ({'; '.join(detail)})" if detail else ""),
     }
 
 

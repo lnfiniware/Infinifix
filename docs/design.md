@@ -1,7 +1,7 @@
 # Design Notes
 
 Repository: `https://github.com/lnfiniware/Infinifix`
-Release line: `v0.1 (beta)`
+Release line: `v0.2 (beta)`
 
 ## CLI Direction
 
@@ -28,6 +28,9 @@ Examples:
 - Always preview plan before writing.
 - Separate `safe` and `advanced` actions.
 - Use plain status words: `ok`, `warn`, `skip`, `fail`.
+- Support automation with `--yes` flags.
+- Prevent concurrent runs with execution locking.
+- Sanitize report payloads before writing archive files.
 
 ## Why Rich
 

@@ -1,5 +1,5 @@
 Name:           infinifix
-Version:        0.1.0
+Version:        0.2.0
 Release:        0.beta.1
 Summary:        Huawei Linux Doctor
 License:        MIT
@@ -53,4 +53,4 @@ chmod 0755 %{buildroot}%{_bindir}/infinifix
 
 %changelog
 * Mon Mar 02 2026 lnfiniware <lnfiniware@users.noreply.github.com>
-- v0.1 beta release metadata and packaging refresh
+- v0.2 beta release: automation flags, report sanitization, lock safety

@@ -40,3 +40,4 @@ cmake --build build/cpp
 - Add/update tests for logic changes.
 - Include sample output for CLI changes.
 - Mention distro impact in PR description.
+- Update `CHANGELOG.md` for user-facing changes.

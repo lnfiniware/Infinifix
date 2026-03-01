@@ -96,6 +96,30 @@ LOGICAL_PACKAGES = {
         "arch": "linux-headers",
         "suse": "kernel-default-devel",
     },
+    "pciutils": {
+        "debian": "pciutils",
+        "fedora": "pciutils",
+        "arch": "pciutils",
+        "suse": "pciutils",
+    },
+    "usbutils": {
+        "debian": "usbutils",
+        "fedora": "usbutils",
+        "arch": "usbutils",
+        "suse": "usbutils",
+    },
+    "alsa-utils": {
+        "debian": "alsa-utils",
+        "fedora": "alsa-utils",
+        "arch": "alsa-utils",
+        "suse": "alsa-utils",
+    },
+    "mokutil": {
+        "debian": "mokutil",
+        "fedora": "mokutil",
+        "arch": "mokutil",
+        "suse": "mokutil",
+    },
 }
 
 

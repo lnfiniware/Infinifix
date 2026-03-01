@@ -10,6 +10,12 @@ Repository: `https://github.com/lnfiniware/Infinifix`
 sudo infinifix apply
 ```
 
+Non-interactive mode:
+
+```bash
+sudo infinifix apply --all --yes
+```
+
 ## No Audio Devices After Apply
 
 1. Reboot once.
@@ -70,3 +76,8 @@ If the launcher is broken, reinstall runtime wrapper and probe:
 sudo ./scripts/uninstall.sh
 sudo ./scripts/install.sh
 ```
+
+## Another Session Is Running
+
+InfiniFix now uses a lock file to avoid overlapping runs.
+If you see a lock warning, wait for the active session to finish.

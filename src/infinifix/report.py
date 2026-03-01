@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 from .distro import DistroInfo
+from .privacy import sanitize_obj
 from .runner import CommandRunner
 
 
@@ -33,7 +34,7 @@ def _write_command_output(runner: CommandRunner, target: Path, command: list[str
         "stdout": result.stdout,
         "stderr": result.stderr,
     }
-    target.write_text(json.dumps(body, indent=2), encoding="utf-8")
+    target.write_text(json.dumps(sanitize_obj(body), indent=2), encoding="utf-8")
 
 
 def generate_report(
@@ -56,7 +57,7 @@ def generate_report(
         },
         "probe": probe_data,
     }
-    (staging / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    (staging / "metadata.json").write_text(json.dumps(sanitize_obj(metadata), indent=2), encoding="utf-8")
 
     commands: dict[str, list[str] | str] = {
         "uname.json": ["uname", "-a"],
@@ -89,4 +90,3 @@ def generate_report(
         archive.add(staging, arcname=f"infinifix-report-{timestamp}")
     shutil.rmtree(staging, ignore_errors=True)
     return report_path
-
