@@ -110,20 +110,6 @@ infinifix/
 - This project does not ship Huawei logos by default.
 - Firmware updates may change hardware behavior; read device notes before applying `--all`.
 
-## Assets Notes
-
-- `assets/laptop.webp` is a placeholder file in this repo.
-- Replace it with a CC-licensed image and add attribution in the section below.
-
-Attribution template:
-
-```text
-Photo title:
-Author:
-License:
-Source URL:
-```
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
