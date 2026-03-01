@@ -15,7 +15,7 @@
   - gives explicit report-bundle hint when audio is still broken
 - Added Ruff lint/format checks in CI and configured Ruff in `pyproject.toml`.
 
-## v0.2.0-beta (2026-02-27)
+## v0.2.0-beta (2026-02-24)
 
 - Added `doctor --all --yes` and `apply --all --yes` non-interactive flow.
 - Added execution lock to prevent overlapping runs.
