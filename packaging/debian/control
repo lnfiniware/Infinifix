@@ -1,0 +1,14 @@
+Source: infinifix
+Section: admin
+Priority: optional
+Maintainer: lnfiniware <lnfiniware@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 13), cmake, g++, python3, python3-setuptools
+Standards-Version: 4.7.0
+Homepage: https://github.com/lnfiniware/Infinifix
+
+Package: infinifix
+Architecture: any
+Depends: ${misc:Depends}, python3, python3-rich, fwupd, alsa-utils, pciutils, usbutils
+Description: Huawei Linux Doctor CLI for safe diagnostics and fixes
+ InfiniFix detects Huawei/Honor Linux issues and applies safe fixes with
+ backups, logs, and rollback path.

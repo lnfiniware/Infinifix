@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>infinifix.desktop</id>
+  <name>InfiniFix</name>
+  <summary>Huawei Linux Doctor</summary>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <url type="homepage">https://github.com/lnfiniware/Infinifix</url>
+  <url type="bugtracker">https://github.com/lnfiniware/Infinifix/issues</url>
+  <description>
+    <p>InfiniFix diagnoses and safely repairs common Linux issues on Huawei and Honor laptops.</p>
+  </description>
+  <launchable type="desktop-id">infinifix.desktop</launchable>
+  <categories>
+    <category>System</category>
+    <category>Utility</category>
+  </categories>
+</component>

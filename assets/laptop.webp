@@ -1,0 +1,18 @@
+PLACEHOLDER FILE (text)
+
+This repository does not ship a binary photo by default.
+Replace this file with a real `.webp` image before publishing docs.
+
+How to source a CC-licensed laptop photo:
+
+1) Go to Wikimedia Commons media search:
+   https://commons.wikimedia.org/wiki/Special:MediaSearch?type=image&search=laptop%20computer
+2) Open an image with license marked CC0, CC BY, or CC BY-SA.
+3) Download a web-sized version and convert to `.webp`:
+   `magick source.jpg -quality 85 assets/laptop.webp`
+4) Add attribution in `README.md`:
+   - Photo title
+   - Author
+   - License
+   - Source URL
+

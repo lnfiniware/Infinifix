@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "infinifix"
+version = "0.1.0b1"
+description = "InfiniFix - Huawei Linux Doctor"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "rich>=13.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/lnfiniware/Infinifix"
+Repository = "https://github.com/lnfiniware/Infinifix"
+Issues = "https://github.com/lnfiniware/Infinifix/issues"
+
+[project.scripts]
+infinifix = "infinifix.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+infinifix = [
+  "data/rules/wireplumber/*.conf",
+  "data/rules/ucm2_overrides/*",
+]

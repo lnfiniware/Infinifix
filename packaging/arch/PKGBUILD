@@ -1,0 +1,44 @@
+pkgname=infinifix
+pkgver=0.1.0b1
+pkgrel=1
+pkgdesc="InfiniFix - Huawei Linux Doctor"
+arch=('x86_64')
+url="https://github.com/lnfiniware/Infinifix"
+license=('MIT')
+depends=('python' 'python-rich' 'fwupd' 'alsa-utils' 'pciutils' 'usbutils')
+makedepends=('cmake' 'gcc' 'make')
+source=("${pkgname}-${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  cmake -S src/cpp -B build/cpp
+  cmake --build build/cpp
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -d "${pkgdir}/usr/bin"
+  install -d "${pkgdir}/usr/share/infinifix"
+  install -d "${pkgdir}/usr/lib/infinifix"
+  install -d "${pkgdir}/usr/share/applications"
+  install -d "${pkgdir}/usr/share/icons/hicolor/scalable/apps"
+  install -d "${pkgdir}/usr/share/metainfo"
+  install -d "${pkgdir}/usr/share/man/man1"
+
+  cp -a src/infinifix "${pkgdir}/usr/share/infinifix/"
+  install -Dm755 build/cpp/probe "${pkgdir}/usr/lib/infinifix/probe"
+  install -Dm644 assets/icon-h.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/infinifix.svg"
+  install -Dm644 packaging/desktop/infinifix.desktop "${pkgdir}/usr/share/applications/infinifix.desktop"
+  install -Dm644 packaging/desktop/infinifix.appdata.xml "${pkgdir}/usr/share/metainfo/infinifix.appdata.xml"
+  install -Dm644 packaging/man/infinifix.1 "${pkgdir}/usr/share/man/man1/infinifix.1"
+
+  cat > "${pkgdir}/usr/bin/infinifix" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+export INFINIFIX_PROBE_PATH=/usr/lib/infinifix/probe
+export PYTHONPATH=/usr/share/infinifix:${PYTHONPATH:-}
+exec python3 -m infinifix.main "$@"
+EOF
+  chmod 755 "${pkgdir}/usr/bin/infinifix"
+}

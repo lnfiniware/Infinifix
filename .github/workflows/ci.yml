@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install rich pytest build
+      - name: Run unit tests
+        run: |
+          PYTHONPATH=src pytest -q
+      - name: Build wheel and sdist
+        run: |
+          python -m build
+      - name: Check packaged data files
+        run: |
+          python - <<'PY'
+          import pathlib, zipfile
+          wheel = sorted(pathlib.Path("dist").glob("*.whl"))[-1]
+          with zipfile.ZipFile(wheel) as zf:
+              names = set(zf.namelist())
+          needed = {"infinifix/data/rules/wireplumber/51-infinifix.conf"}
+          missing = sorted(item for item in needed if item not in names)
+          if missing:
+              raise SystemExit(f"Missing package data files: {missing}")
+          PY
+      - name: Build probe
+        run: |
+          cmake -S src/cpp -B build/cpp
+          cmake --build build/cpp
+
+  cross-build-best-effort:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        include:
+          - name: fedora
+            image: fedora:41
+          - name: arch
+            image: archlinux:latest
+          - name: suse
+            image: opensuse/leap:15
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build deps
+        run: |
+          set -eux
+          case "${{ matrix.name }}" in
+            fedora)
+              dnf install -y cmake gcc-c++ make
+              ;;
+            arch)
+              pacman -Sy --noconfirm cmake gcc make
+              ;;
+            suse)
+              zypper --non-interactive install cmake gcc-c++ make
+              ;;
+          esac
+      - name: Build probe
+        run: |
+          cmake -S src/cpp -B build/cpp
+          cmake --build build/cpp

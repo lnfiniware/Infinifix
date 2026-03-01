@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=InfiniFix
+Comment=Huawei Linux Doctor
+Exec=infinifix doctor
+Icon=infinifix
+Terminal=true
+Categories=System;Utility;
+Keywords=linux;huawei;honor;audio;firmware;
+

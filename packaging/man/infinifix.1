@@ -1,0 +1,40 @@
+.TH INFINIFIX 1 "March 2026" "InfiniFix v0.1 beta" "User Commands"
+.SH NAME
+infinifix \- Huawei Linux Doctor
+.SH SYNOPSIS
+.B infinifix
+[\-\-dry\-run] [\-\-version]
+.I command
+[options]
+.SH DESCRIPTION
+InfiniFix is a terminal-first diagnostics and repair tool for Huawei and Honor laptops on Linux.
+.br
+Project: https://github.com/lnfiniware/Infinifix
+.SH COMMANDS
+.TP
+.B doctor
+Interactive guided diagnostics and safe fix preview.
+.TP
+.B report
+Generate a diagnostic tarball.
+.TP
+.B apply
+Apply safe fixes.
+.TP
+.B apply \-\-all
+Apply safe and advanced fixes after warnings.
+.TP
+.B revert
+Restore latest backup session.
+.TP
+.B status
+Show last run state and changed items.
+.SH FILES
+.TP
+.B /var/lib/infinifix/backups/
+Timestamped backup sessions.
+.TP
+.B /var/log/infinifix/reports/
+Diagnostic report tarballs.
+.SH EXIT STATUS
+0 on success, non-zero on failure.
