@@ -1,22 +1,23 @@
-MIT License
+# Infiniware Simple License
+Version 1.0 // 2026
 
-Copyright (c) 2026 Infiniware
+This license is designed to encourage individual use and innovation while protecting the integrity of the Infiniware ecosystem. It is a simple, human-readable agreement that prioritizes honesty and fair play.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Short version: Be honest, stay human, and don't steal the brand identity.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+---
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+### 1. Grant of Use
+Infiniware grants you a non-exclusive, non-transferable license to use, run, and interact with our provided software for any personal or professional purpose, provided that you comply with the brand usage terms.
 
+### 2. Redistribution & Cloning
+You may NOT repackage, white-label, or redistribute Infiniware software as a standalone product or as part of another bundle without significant modification or express written consent. Simple cloning of the UI/layout for competitive purposes is prohibited.
+
+### 3. Intellectual Property & Attribution
+All logos, design systems, and brand assets are intellectual property of Infiniware. If you utilize significant structural pieces of our public code in your own project, a visible attribution (e.g., "Inspired by Infiniware") is required.
+
+### 4. Disclaimer of Warranty
+The software is provided "as is," without any warranty of any kind. We are not liable for any damages or data issues arising from the interaction with our tools.
+
+---
+(c) 2026 Infiniware. Crafted by human hand.
